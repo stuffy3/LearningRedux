@@ -1,0 +1,44 @@
+redux is not tied to React, it can be used with React Angular, Vue and others
+Redux is a state container, it stores state of your application, state is represented by all the individual components of that app
+Redux is a predictable state container for JavaScript apps.  Why do I need another application to hold state when React does that?  With redux state is held outside components.
+React-Redux is the official binding ui that enables the use of REact and Redux together.
+
+Three Core Concepts of Redux:
+
+    Scenarios: Cake Shop
+    Entities: 
+        shop,  Store / holds state of the app
+        shopkeeper, Reducer  / ties the store and actions together
+        customer Actions / Buy Cake / Describes what happens
+    Activities: 
+        Customer - buy cake 
+        Shopkeeper - Remove Cake from the shelf, Receipt to keep track
+
+Store: holds the state - the state of the whole app is stored in an object tree within a single store
+    Maintin our app state in a single object thats managed by redux store
+Responsibilities:
+    Holds Application state
+    Allows access to state via getState()
+    Allows state to be updateed via dispatch(action)
+    Registers listeners via subscribe(listener)
+    Handles unregistering of listeners via the Function returned by the subscribe(listener)
+
+Action: describes the changes in the state of the application, the only way to change the state is to emit an action, an object describing what happened
+    to update the state you need to let Redux know about that with an acton, read only, not allowed to directly update the state object
+    Its the only way to intereact with the store, carry some information from your app to the store, use plain js objects
+    {
+        type: Buy_Cake
+    }
+Reducer: carries out the state transition depending on the Action, to specefy how the state tree is transformed by actions, you write pure reducers
+    reducer - (previouseState, action) => newState
+    Function that accepts state and action as arguments and returns the next state of the application
+    Reducer is Shopkeeper
+    const reducer = (state, action) => {
+        switch (action.type) {
+            case BUY_CAKE: return {
+                numOfCakes: state.numOfCakes - 1
+            }
+        }
+    }
+
+App dispatches an action to update state, the update is the handled by the Reducer which updates state and then returns it to the app since its subscribed to it.
