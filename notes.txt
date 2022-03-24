@@ -41,4 +41,49 @@ Reducer: carries out the state transition depending on the Action, to specefy ho
         }
     }
 
+Adding multiple reducers:
+    combineReducers = redux.combineReducers
+    const rootReducer = combineReducers({
+        cake: cakeReducer,
+        iceCream: iceCreamReducer
+    })
+    const store = createStore(rootReducer)
+
 App dispatches an action to update state, the update is the handled by the Reducer which updates state and then returns it to the app since its subscribed to it.
+
+MiddleWare: suggested way to extend Redux with cusom functionality, provides thrid party extention points between dispatching an action, and the moment it reaches the reducer, use middleware for logging, crash reports, performing async tasks
+const applyMiddleware = redux.applyMiddleware
+attach the middleware to the store
+const store = createStore(rootReducer, applyMiddleware(logger)) logger is the middleware
+
+Async Actions:
+    SYNCHRONOUS
+    As soon as an action is dispatched, the state was imediately updated
+    If you dispatch BUY_CAKE action, tyhe numOfCakes was right away decremented by 1
+    Same with BUY_ICECREAM action as well
+
+    ASYNC
+    Asynchronous API calls to fetch data from an end point and use that data in your application.
+What state looks like
+    state ={
+        loading: true, displaus loading spinner in component
+        data: [], lists users
+        error: '' displays errors
+    }
+What the Action: would look like:
+FETCH_USERS_REQUEST - requests list of users
+FETCH_USERS_SUCCESS - fetch successfully
+FETCH_USERS_FAILURE - Error fetching data
+
+What the Reducer: would look like:
+case: FETCH_USERS_REQUEST
+    loading:true
+case: FETCH_USERS_SUCCESS
+    loading: false
+    users: data (from API)
+case: FETCH_USERS_FAILURE
+    loading: false
+    error: error (from API)
+
+Use Axios to make requests to the API
+Use redux-thunk to define action creators, middleware
