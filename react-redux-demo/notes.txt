@@ -1,0 +1,90 @@
+React Redux + Hooks
+React Redux pattern, action creators, reducers, provide the store and connect the components
+Components can access state and dispatch actions
+React Hooks
+Subscribe to the store and dispatch actions without the redux connect()
+
+useSelector() a hook that react redux provides that is equivilent to mapStateToProps function, it is able to get a hold of state in the store
+-import useSelector  import { useSelector } from 'react-redux'
+function HooksCakeContainer() {
+  const numOfCakes = useSelector(state => state.numOfCakes)
+  const dispatch = useDispatch()
+    return (
+    
+    <div>
+        <h2>Num of Cakes {numOfCakes}</h2>
+        <button onClick={() => dispatch(buyCake())}>Buy cake</button>
+    </div>
+  )
+}
+Adding Middleware to a React application.
+npm i redux-logger, then import it into the store.js file
+
+
+mapStateToProps recieves redux state as param and the props that have already been passed to the components
+As the first argument passed in to connect, mapStateToProps is used for selecting the part of the data from 
+the store that the connected component needs. It’s frequently referred to as just mapState for short.
+It is called every time the store state changes.
+It receives the entire store state, and should return an object of data this component needs.
+
+import React from 'react'
+import { connect } from 'react-redux'
+function ItemContainer(props) {
+  return (
+    <div>
+        <h2> Item - {props.item}  </h2>
+    </div>
+  )
+}
+const mapStateToProps = (state, ownProps) => {
+  const itemState = ownProps.cake
+   ? state.cake.numOfCakes
+   : state.iceCream.numOfIceCreams
+return {
+    item: itemState
+}
+}
+export default connect(mapStateToProps)(ItemContainer)
+
+mapDispatchToProps() it accepts two, dispatch, ownProps
+As the second argument passed in to connect, mapDispatchToProps is used for dispatching actions to the store.
+
+dispatch is a function of the Redux store. You call store.dispatch to dispatch an action. This is the only way to trigger a state change.
+
+With React Redux, your components never access the store directly - connect does it for you. React Redux gives you two ways to let components dispatch actions:
+
+By default, a connected component receives props.dispatch and can dispatch actions itself.
+connect can accept an argument called mapDispatchToProps, which lets you create functions that dispatch when called, and pass those functions as props to your component.
+The mapDispatchToProps functions are normally referred to as mapDispatch for short, but the actual variable name used can be whatever you want.
+
+import React from 'react'
+import { connect } from 'react-redux'
+import { buyCake, buyIceCream} from '../redux'
+
+function ItemContainer(props) {
+  return (
+    <div>
+        <h2> Item - {props.item}  </h2>
+        <button onClick={props.buyItem}>Buy Items</button>
+    </div>
+  )
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    const dispatchFunction = ownProps.cake
+    ? () => dispatch(buyCake())
+    : () => dispatch(buyIceCream())
+
+    return {
+        buyItem: dispatchFunction
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ItemContainer)
+
+Async Actions:
+state = {
+  loading: true,
+  data: [],
+  error: ''
+}
